@@ -1,0 +1,8 @@
+# main.py
+# Starts the REPL
+
+from repl import start_repl
+
+if __name__ == '__main__':
+    print("Welcome to the MiniLang REPL. Type 'exit' to quit.")
+    start_repl()
