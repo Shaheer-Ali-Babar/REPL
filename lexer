@@ -1,0 +1,44 @@
+# lexer.py
+# Responsible for breaking input into tokens
+
+def tokenize(source):
+    tokens = []
+    i = 0
+    while i < len(source):
+        if source[i].isspace():
+            i += 1
+        elif source[i].isalpha():
+            start = i
+            while i < len(source) and (source[i].isalnum() or source[i] == '_'):
+                i += 1
+            word = source[start:i]
+            if word == 'let':
+                tokens.append(('LET', word))
+            elif word == 'print':
+                tokens.append(('PRINT', word))
+            else:
+                tokens.append(('IDENT', word))
+        elif source[i].isdigit():
+            start = i
+            while i < len(source) and source[i].isdigit():
+                i += 1
+            # Check for floating point numbers
+            if i < len(source) and source[i] == '.':
+                i += 1
+                while i < len(source) and source[i].isdigit():
+                    i += 1
+                tokens.append(('NUMBER', source[start:i]))
+            else:
+                tokens.append(('NUMBER', source[start:i]))
+        elif source[i] in '+-*/=();':
+            tokens.append((source[i], source[i]))
+            i += 1
+        elif source[i:i+2] == '==':
+            tokens.append(('EQ', '=='))
+            i += 2
+        elif source[i:i+2] == '!=':
+            tokens.append(('NEQ', '!='))
+            i += 2
+        else:
+            raise Exception(f"Unexpected character: {source[i]} at position {i}")
+    return tokens
